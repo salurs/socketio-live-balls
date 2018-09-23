@@ -1,0 +1,21 @@
+{
+  "name": "liveballs",
+  "description": "",
+  "main": "",
+  "authors": [
+    "salurs <orhsssalur@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/salurs/socketio-live-balls",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.7.4",
+    "semantic": "^2.4.0"
+  }
+}
