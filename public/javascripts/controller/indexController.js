@@ -1,6 +1,7 @@
 app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFactory) =>{
     
     $scope.messages = [];
+    $scope.players = {};
 
     $scope.init = () =>{
         const username = prompt('Please Enter Username');
@@ -19,6 +20,13 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
         .then((socket) =>{
             socket.emit('newUser', {username: username});
 
+            //initPlayer karşılamak
+            socket.on('initPlayers', (players) =>{
+                $scope.players = players;
+                $scope.$apply();
+            });
+
+            //newUser Karşılamak
             socket.on('newUser', (data) =>{
                 const messageData = {
                     type: {
@@ -30,6 +38,8 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
                 $scope.messages.push(messageData);
                 $scope.$apply();
             });
+
+            //disUser Karşılamak
             socket.on('disUser', (data) =>{
                 const messageData = {
                     type: {
