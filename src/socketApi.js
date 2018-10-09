@@ -6,13 +6,17 @@ socketApi.io = io;
 
 const users = {};
 
+//helpers
+const rondomColor = require('../helper/rondomColor');
+
 io.on('connection', (socket) =>{
     console.log('a user connected');
 
     socket.on('newUser', (data) =>{
        const defaultData = {
            id: socket.id,
-           position: {x: 0, y: 0}
+           position: {x: 0, y: 0},
+           color: rondomColor()
        }
        const userData = Object.assign(data, defaultData);
        users[socket.id] = userData;
