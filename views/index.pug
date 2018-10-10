@@ -17,9 +17,9 @@ block content
                       //.message
 
 
-                .ui.items.chat
+                .ui.items.chat#chat-area
                   .item(ng-repeat="message in messages")
-                    .content(ng-if="!message.code")
+                    .content(ng-if="!message.type.code")
                       span [SERVER] &nbsp; &nbsp;
                       a.header.name {{ message.username }} &nbsp;
                       .description.message(ng-if="!message.type.message")
@@ -28,6 +28,12 @@ block content
                         | Katıldı.
 
 
-                .ui.action.input.fluid
-                  input(type='text', placeholder='Type here...')
-                  button.ui.button Send
+                    .content(ng-if="message.type.code")
+                      a.header.name {{ message.username }} &nbsp;
+                      .description.message(ng-if="!message.type.message")
+                        | {{message.text}}
+
+
+                form.ui.action.input.fluid(ng-submit = "newMessage()")
+                  input(ng-model = 'message', placeholder='Type here...')
+                  button.ui.button(type = "submit") Send
