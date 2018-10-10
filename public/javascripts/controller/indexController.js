@@ -10,12 +10,20 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
         else
             return false;
     };
-    //scroll fonction
+    //scroll fonction*****************************************************************
     function scrollTop(){
         setTimeout(() =>{
             const element  = document.getElementById('chat-area');
             element.scrollTop = element.scrollHeight;
         });
+    }
+    // bubble function***************************************************************
+    function showBubble(id, message){
+        $('#' + id).find('.message').show().html(message);
+
+        setTimeout(() => {
+            $('#' + id).find('.message').hide();
+        }, 2000);
     }
 
     function initSocket(username){
@@ -27,13 +35,13 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
         .then((socket) =>{
             socket.emit('newUser', {username: username});
 
-            //initPlayer karşılamak
+            //initPlayer karşılamak*******************************************************
             socket.on('initPlayers', (players) =>{
                 $scope.players = players;
                 $scope.$apply();
             });
 
-            //newUser Karşılamak
+            //newUser Karşılamak********************************************************
             socket.on('newUser', (data) =>{
                 const messageData = {
                     type: {
@@ -47,7 +55,7 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
                 $scope.$apply();
             });
 
-            //disUser Karşılamak
+            //disUser Karşılamak*****************************************************
             socket.on('disUser', (data) =>{
                 const messageData = {
                     type: {
@@ -61,21 +69,22 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
                 $scope.$apply();
             });
 
-            //animate x, y coodinates
+            //animate x, y coodinates***************************************************
             socket.on('animate', data =>{
                 $('#' + data.socketId).animate({'left': data.x, 'top': data.y}, () =>{
                     animate = false;
                 });
             });
 
-            // message data karşılamak
+            // message data karşılamak*******************************************************
             socket.on('newMessage', message =>{
                 $scope.messages.push(message);
                 $scope.$apply();
+                showBubble(message.socketId, message.text);
                 scrollTop();
             });
 
-            //animate işlemleri
+            //animate işlemleri**************************************************************
             let animate = false;
             $scope.onClickPlayer = ($event) =>{
                 if(!animate){
@@ -90,6 +99,8 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
                    });
                }
             };
+            
+            //********************************************************************* */
             $scope.newMessage = () =>{
                 let message = $scope.message;
                 const messageData = {
@@ -104,6 +115,7 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
 
                 socket.emit('newMessage', messageData);
 
+                showBubble(socket.id, message);
                 scrollTop();
             };
         }).catch((error) =>{
