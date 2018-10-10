@@ -25,14 +25,14 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
             $('#' + id).find('.message').hide();
         }, 2000);
     }
-
-    function initSocket(username){
+    //*****************************************************************************************
+    async function initSocket(username){
         const connOpt = {
             reconnectionAttempts: 5,
             reconnectionDelay: 500,
         };
-        indexFactory.connectSocket('http://localhost:3000', connOpt)
-        .then((socket) =>{
+        try {
+            const socket = await indexFactory.connectSocket('http://localhost:3000', connOpt);
             socket.emit('newUser', {username: username});
 
             //initPlayer karşılamak*******************************************************
@@ -120,8 +120,8 @@ app.controller('indexController', ['$scope', 'indexFactory', ($scope, indexFacto
                 showBubble(socket.id, message);
                 scrollTop();
             };
-        }).catch((error) =>{
-            console.log(error);
-        });
+        } catch (hata) {
+            console.log(hata)
+        }
     }
 }]);
